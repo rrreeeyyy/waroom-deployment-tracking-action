@@ -1,26 +1,77 @@
-import * as core from '@actions/core'
-import { wait } from './wait'
+import { getInput, setFailed, error } from '@actions/core'
+import { HttpClient, HttpCodes } from '@actions/http-client'
+import { BearerCredentialHandler } from '@actions/http-client/lib/auth'
 
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
+interface RequestPayload {
+  ref: string
+  enviornment: string
+  platform: string
+  description: string
+  repository_owner: string
+  repository_name: string
+}
+
+interface WaroomDeployment {
+  id: number
+  service_id: number
+  ref: string
+  enviornment: string
+  platform: string
+  description: string
+  repository_owner: string
+  repository_name: string
+  created_at: string
+  updated_at: string
+  service: WaroomService
+}
+
+interface WaroomService {
+  id: number
+  name: string
+  organization_id: number
+  created_at: string
+  updated_at: string
+}
+
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const organization = getInput('organization')
+    const service = getInput('service')
+    const key = getInput('key')
+    const ref = getInput('ref')
+    const enviornment = getInput('enviornment')
+    const platform = getInput('platform')
+    const description = getInput('description')
+    const repository_owner = getInput('repository_owner')
+    const repository_name = getInput('repository_name')
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    const url = `https://api.app.waroom.com/v1/organizations/${organization}/services/${service}/deployments`
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const credentialHandler = new BearerCredentialHandler(key)
+    const client = new HttpClient('waroom-deployment-tracking-action', [
+      credentialHandler
+    ])
+    const payload: RequestPayload = {
+      ref,
+      enviornment,
+      platform,
+      description,
+      repository_owner,
+      repository_name
+    }
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    const res = await client.postJson<WaroomDeployment>(url, payload)
+
+    if (res.statusCode !== HttpCodes.OK) {
+      throw new Error(`Unexpected HTTP response: ${res.statusCode}`)
+    }
+  } catch (err) {
+    if (err instanceof Error) {
+      error(`Deployment tracking failed: ${err.message}`)
+      if (getInput('fail_on_error').toLowerCase() === 'true') {
+        // Fail the workflow run if an error occurs
+        setFailed(err.message)
+      }
+    }
   }
 }
