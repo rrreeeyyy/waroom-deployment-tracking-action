@@ -25674,7 +25674,7 @@ async function run() {
             throw new Error(`Unexpected HTTP response: ${res.statusCode}`);
         }
         else {
-            (0, core_1.info)(`Deployment tracking successful: ${res.result}`);
+            (0, core_1.info)(`Deployment tracking successful: ${JSON.stringify(res.result)}`);
         }
     }
     catch (err) {
