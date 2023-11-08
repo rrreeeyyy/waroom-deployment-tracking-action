@@ -1,3 +1,5 @@
+This repository archived, use https://github.com/topotal/waroom-deployment-tracking-action instead.
+
 # Waroom Deployment Tracking Action
 
 This GitHub Action calls the Waroom Deployment Tracking API.
