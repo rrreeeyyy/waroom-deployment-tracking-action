@@ -25651,7 +25651,7 @@ async function run() {
         const service = (0, core_1.getInput)('service');
         const key = (0, core_1.getInput)('key');
         const ref = (0, core_1.getInput)('ref');
-        const enviornment = (0, core_1.getInput)('environment');
+        const environment = (0, core_1.getInput)('environment');
         const platform = (0, core_1.getInput)('platform');
         const description = (0, core_1.getInput)('description');
         const repository_owner = (0, core_1.getInput)('repository_owner');
@@ -25663,7 +25663,7 @@ async function run() {
         ]);
         const payload = {
             ref,
-            enviornment,
+            environment,
             platform,
             description,
             repository_owner,
