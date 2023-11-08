@@ -4,7 +4,7 @@ import { BearerCredentialHandler } from '@actions/http-client/lib/auth'
 
 interface RequestPayload {
   ref: string
-  enviornment: string
+  environment: string
   platform: string
   description: string
   repository_owner: string
@@ -15,7 +15,7 @@ interface WaroomDeployment {
   id: number
   service_id: number
   ref: string
-  enviornment: string
+  environment: string
   platform: string
   description: string
   repository_owner: string
@@ -39,7 +39,7 @@ export async function run(): Promise<void> {
     const service = getInput('service')
     const key = getInput('key')
     const ref = getInput('ref')
-    const enviornment = getInput('environment')
+    const environment = getInput('environment')
     const platform = getInput('platform')
     const description = getInput('description')
     const repository_owner = getInput('repository_owner')
@@ -53,7 +53,7 @@ export async function run(): Promise<void> {
     ])
     const payload: RequestPayload = {
       ref,
-      enviornment,
+      environment,
       platform,
       description,
       repository_owner,
