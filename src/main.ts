@@ -1,4 +1,4 @@
-import { getInput, setFailed, error } from '@actions/core'
+import { getInput, setFailed, error, info } from '@actions/core'
 import { HttpClient, HttpCodes } from '@actions/http-client'
 import { BearerCredentialHandler } from '@actions/http-client/lib/auth'
 
@@ -39,7 +39,7 @@ export async function run(): Promise<void> {
     const service = getInput('service')
     const key = getInput('key')
     const ref = getInput('ref')
-    const enviornment = getInput('enviornment')
+    const enviornment = getInput('environment')
     const platform = getInput('platform')
     const description = getInput('description')
     const repository_owner = getInput('repository_owner')
@@ -64,6 +64,8 @@ export async function run(): Promise<void> {
 
     if (res.statusCode !== HttpCodes.OK) {
       throw new Error(`Unexpected HTTP response: ${res.statusCode}`)
+    } else {
+      info(`Deployment tracking successful: ${res.result}`)
     }
   } catch (err) {
     if (err instanceof Error) {
