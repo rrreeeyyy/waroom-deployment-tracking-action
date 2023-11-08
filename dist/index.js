@@ -25651,7 +25651,7 @@ async function run() {
         const service = (0, core_1.getInput)('service');
         const key = (0, core_1.getInput)('key');
         const ref = (0, core_1.getInput)('ref');
-        const enviornment = (0, core_1.getInput)('enviornment');
+        const enviornment = (0, core_1.getInput)('environment');
         const platform = (0, core_1.getInput)('platform');
         const description = (0, core_1.getInput)('description');
         const repository_owner = (0, core_1.getInput)('repository_owner');
@@ -25672,6 +25672,9 @@ async function run() {
         const res = await client.postJson(url, payload);
         if (res.statusCode !== http_client_1.HttpCodes.OK) {
             throw new Error(`Unexpected HTTP response: ${res.statusCode}`);
+        }
+        else {
+            (0, core_1.info)(`Deployment tracking successful: ${res.result}`);
         }
     }
     catch (err) {
