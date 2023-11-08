@@ -65,7 +65,7 @@ export async function run(): Promise<void> {
     if (res.statusCode !== HttpCodes.OK) {
       throw new Error(`Unexpected HTTP response: ${res.statusCode}`)
     } else {
-      info(`Deployment tracking successful: ${res.result}`)
+      info(`Deployment tracking successful: ${JSON.stringify(res.result)}`)
     }
   } catch (err) {
     if (err instanceof Error) {
